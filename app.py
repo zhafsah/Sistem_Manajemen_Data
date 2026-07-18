@@ -193,7 +193,13 @@ if not df_filtered.empty:
     # Tampilkan salinan tabel terformat tanggal ringkas
     df_display = df_filtered.copy()
     df_display['Tanggal'] = df_display['Tanggal'].dt.strftime('%Y-%m-%d')
-    st.dataframe(df_display, use_container_width=True)
+    
+    # MENGGUNAKAN DATA EDITOR AGAR KOTAK CENTANG MUNCUL KEMBALI
+    st.data_editor(
+        df_display, 
+        use_container_width=True,
+        num_rows="dynamic"  # Mengaktifkan fitur interaksi baris termasuk checkbox seleksi
+    )
 
 # ==========================================
 # 6. AREA UNGGUH CSV & PROSES DATA
