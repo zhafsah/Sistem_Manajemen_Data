@@ -202,11 +202,32 @@ if not df_filtered.empty:
     )
 
 # ==========================================
-# 6. AREA UNGGUH CSV & PROSES DATA
+# 6. TABEL UTAMA & ACTION HAPUS DATA (MULTI-SELECT)
 # ==========================================
-st.subheader("📤 Unggah File Laporan Baru")
-uploaded_files = st.file_uploader("Pilih file CSV Iklan / Shopee Anda (Bisa lebih dari satu)", type="csv", accept_multiple_files=True)
+st.markdown("<br>", unsafe_allow_html=True)
+st.subheader("📋 Riwayat Laporan Harian")
+if df_filtered.empty:
+    st.info("Belum ada data terekam pada periode ini.")
+else:
+    # Mengubah format visual US menjadi ID (Koma jadi Titik)
+    df_styled_summary = df_filtered.style.format({
+        'Spend': lambda x: f"Rp {int(round(x)):,}".replace(',', '.'),
+        'Komisi Iklan': lambda x: f"Rp {int(round(x)):,}".replace(',', '.'),
+        'Komisi Organik': lambda x: f"Rp {int(round(x)):,}".replace(',', '.'),
+        'Total Komisi (Nett)': lambda x: f"Rp {int(round(x)):,}".replace(',', '.'),
+        'Profit': lambda x: f"Rp {int(round(x)):,}".replace(',', '.')
+    }).apply(gaya_tabel_summary, axis=1)
+    
+    # --- PERBAIKAN DI SINI ---
+    # Pastikan argumen on_select dan selection_mode aktif di st.dataframe agar kotak centang muncul kembali
+    event_pilih = st.dataframe(
+        df_styled_summary, 
+        use_container_width=True, 
+        hide_index=False,            # Ubah ke False jika ingin index bawaan terlihat, atau True untuk menyembunyikannya
+        on_select="rerun", 
+        selection_mode="multi-row"   # Ini yang memunculkan kotak centang baris
+    )
 
-if uploaded_files:
-    st.info(f"📂 Berhasil memuat {len(uploaded_files)} file. Siap diproses ke Google Sheets baru Anda.")
-    # Tombol eksekusi proses data bisa Anda tambahkan di bawah ini sesuai logika ekstraksi Anda sebelumnya
+    if event_pilih and len(event_pilih["selection"]["rows"]) > 0:
+        indeks_terpilih = event_pilih["selection"]["rows"]
+        # ... kode di bawahnya tetap sama tanpa ada perubahan fungsi ...
