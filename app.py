@@ -45,12 +45,34 @@ def bersihkan_angka_sakti(series):
 
 
 # ==========================================
-# 1. PENGATURAN HALAMAN & KONEKSI GOOGLE SHEETS
+# 1. PENGATURAN HALAMAN & KONEKSI GOOGLE SHEETS (VERSI MULTI-AKUN V2)
 # ==========================================
-st.set_page_config(page_title="Affiliate Advanced Analytics", layout="wide")
+st.set_page_config(
+    page_title="PRO-Affiliate Multi-Account Analytics", 
+    page_icon="📈",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-st.title("📊 Dashboard Evaluasi & Performa Affiliate (Versi Multi-Akun)")
-st.write("Kelola pengeluaran iklan Meta dan optimalkan komisi bersih dari berbagai akun Shopee Anda secara otomatis.")
+# Desain Banner Header Baru yang Mencolok
+st.markdown("""
+    <div style="background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); padding: 25px; border-radius: 12px; margin-bottom: 25px; color: white;">
+        <h1 style="margin: 0; font-size: 32px;">🚀 PRO-Affiliate Analytics</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 16px;"><b>Versi Multi-Akun & Aggregator Cloud</b> — Pantau performa iklan Meta dan banyak akun Shopee secara tersentralisasi.</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# Tambahan Visual di Area Sidebar
+with st.sidebar:
+    st.markdown("### 🛠️ Sistem Status")
+    st.success("🟢 Terhubung ke Cloud Baru")
+    
+    st.markdown("### 📊 Fitur Multi-Akun")
+    st.info("Mendukung kombinasi hingga 5 file CSV sekaligus (Meta Ads + Multi-Akun Shopee Clicks & Sales).")
+    
+    st.markdown("---")
+    st.caption("PRO-Affiliate Analytics Engine v2.0 • 2026")
+
 
 BULAN_INDO = {
     1: "Januari", 2: "Februari", 3: "Maret", 4: "April", 5: "Mei", 6: "Juni",
@@ -329,14 +351,9 @@ if not df_filtered.empty:
 
 
 # ==========================================
-# 5. KOTAK METRIK SUMMARY INDONESIA PALETTE
+# 5. KARTU METRIK PREMIUM (DESAIN MULTI-AKUN)
 # ==========================================
 st.markdown("<br>", unsafe_allow_html=True)
-
-style_label_top = "font-size: 14px; color: rgb(49, 51, 63); opacity: 0.8; font-weight: 400; margin-bottom: 2px;"
-style_value_top = "font-size: 28px; font-weight: 600; margin-top: 0px; margin-bottom: 0px;"
-
-col_m1, col_m2, col_m3, col_m4, col_m5 = st.columns(5)
 
 val_spend = pd.to_numeric(df_filtered['Spend'], errors='coerce').sum() if not df_filtered.empty else 0
 val_komisi_iklan = pd.to_numeric(df_filtered['Komisi Iklan'], errors='coerce').sum() if not df_filtered.empty else 0
@@ -344,19 +361,54 @@ val_komisi_organik = pd.to_numeric(df_filtered['Komisi Organik'], errors='coerce
 val_keuntungan_iklan = val_komisi_iklan - val_spend
 val_total_keuntungan = pd.to_numeric(df_filtered['Profit'], errors='coerce').sum() if not df_filtered.empty else 0
 
-with col_m1: 
-    st.metric(label="💸 Total Pengeluaran Iklan", value=f"Rp {int(round(val_spend)):,}".replace(',', '.'))
-with col_m2: 
-    st.metric(label="🎯 Total Komisi Iklan (Meta)", value=f"Rp {int(round(val_komisi_iklan)):,}".replace(',', '.'))
-with col_m3: 
-    st.metric(label="📱 Total Komisi Organik", value=f"Rp {int(round(val_komisi_organik)):,}".replace(',', '.'))
-with col_m4: 
-    warna_teks_iklan = "#107C41" if val_keuntungan_iklan >= 0 else "#A80000"
-    st.markdown(f"<div style='{style_label_top}'>💰 Keuntungan Iklan</div>", unsafe_allow_html=True)
-    st.markdown(f"<div style='{style_value_top} color: {warna_teks_iklan};'>Rp {int(round(val_keuntungan_iklan)):,}".replace(',', '.') + "</div>", unsafe_allow_html=True)
-with col_m5: 
-    st.metric(label="📈 Keuntungan Bersih (Total)", value=f"Rp {int(round(val_total_keuntungan)):,}".replace(',', '.'))
+# Grid 5 Kolom dengan Desain Visual Berbeda
+cm1, cm2, cm3, cm4, cm5 = st.columns(5)
 
+with cm1:
+    st.markdown(f"""
+        <div style="background-color: #FEF2F2; border-left: 5px solid #EF4444; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <p style="margin:0; font-size:12px; color:#991B1B; font-weight:bold; text-transform:uppercase;">💸 Total Ads Spend</p>
+            <h3 style="margin:5px 0 0 0; color:#DC2626; font-size:20px;">Rp {int(round(val_spend)):,}".replace(',', '.') + "</h3>
+        </div>
+    """, unsafe_allow_html=True)
+
+with cm2:
+    st.markdown(f"""
+        <div style="background-color: #EFF6FF; border-left: 5px solid #3B82F6; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <p style="margin:0; font-size:12px; color:#1E40AF; font-weight:bold; text-transform:uppercase;">🎯 Komisi Iklan</p>
+            <h3 style="margin:5px 0 0 0; color:#2563EB; font-size:20px;">Rp {int(round(val_komisi_iklan)):,}".replace(',', '.') + "</h3>
+        </div>
+    """, unsafe_allow_html=True)
+
+with cm3:
+    st.markdown(f"""
+        <div style="background-color: #F5F3FF; border-left: 5px solid #8B5CF6; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <p style="margin:0; font-size:12px; color:#5B21B6; font-weight:bold; text-transform:uppercase;">📱 Komisi Organik</p>
+            <h3 style="margin:5px 0 0 0; color:#7C3AED; font-size:20px;">Rp {int(round(val_komisi_organik)):,}".replace(',', '.') + "</h3>
+        </div>
+    """, unsafe_allow_html=True)
+
+with cm4:
+    bg_iklan = "#ECFDF5" if val_keuntungan_iklan >= 0 else "#FFF5F5"
+    border_iklan = "#10B981" if val_keuntungan_iklan >= 0 else "#EF4444"
+    teks_iklan = "#065F46" if val_keuntungan_iklan >= 0 else "#991B1B"
+    st.markdown(f"""
+        <div style="background-color: {bg_iklan}; border-left: 5px solid {border_iklan}; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <p style="margin:0; font-size:12px; color:{teks_iklan}; font-weight:bold; text-transform:uppercase;">📊 Profit Iklan Murni</p>
+            <h3 style="margin:5px 0 0 0; color:{border_iklan}; font-size:20px;">Rp {int(round(val_keuntungan_iklan)):,}".replace(',', '.') + "</h3>
+        </div>
+    """, unsafe_allow_html=True)
+
+with cm5:
+    bg_net = "#F0FDF4" if val_total_keuntungan >= 0 else "#FFF5F5"
+    border_net = "#22C55E" if val_total_keuntungan >= 0 else "#EF4444"
+    teks_net = "#166534" if val_total_keuntungan >= 0 else "#991B1B"
+    st.markdown(f"""
+        <div style="background-color: {bg_net}; border-left: 5px solid {border_net}; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <p style="margin:0; font-size:12px; color:{teks_net}; font-weight:bold; text-transform:uppercase;">💎 Net Profit (Total)</p>
+            <h3 style="margin:5px 0 0 0; color:{border_net}; font-size:22px; font-weight:bold;">Rp {int(round(val_total_keuntungan)):,}".replace(',', '.') + "</h3>
+        </div>
+    """, unsafe_allow_html=True)
 
 # ==========================================
 # 6. TABEL UTAMA & ACTION HAPUS DATA (MULTI-SELECT)
